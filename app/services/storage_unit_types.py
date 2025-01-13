@@ -1,8 +1,14 @@
+from sqlalchemy.exc import IntegrityError
+from fastapi import HTTPException, status
 from sqlalchemy.orm import load_only
 from typing import List
 from sqlalchemy.orm import Session
 
+# Models
 from app.models.storage_unit_type import StorageUnitType
+
+# Schemas
+from app.schemas.storage_unit_type.storage_unit_type_base import StorageUnitTypeBase
 
 def get_all_storage_unit_types(db: Session) -> List[StorageUnitType]:
     return db.query(StorageUnitType).all()
@@ -16,3 +22,46 @@ def get_all_storage_unit_type_ids(db: Session) -> List[str]:
     return [
         type.id for type in storage_unit_types
     ]
+
+def get_all_storage_unit_type_bases(db: Session) -> List[StorageUnitTypeBase]:
+    storage_unit_type = db.query(StorageUnitType).options(
+        load_only(
+            StorageUnitType.id,
+            StorageUnitType.description
+        )
+    ).all()
+    return [
+        StorageUnitTypeBase.model_validate(type) for type in storage_unit_type
+    ]
+
+
+
+def add_storage_unit_type(db: Session, storage_unit_type: StorageUnitTypeBase) -> None:
+    db_storage_unit_type = StorageUnitType(**storage_unit_type.model_dump())
+    try:
+        db.add(db_storage_unit_type)
+        db.commit()
+        db.refresh(db_storage_unit_type)
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Storage unit type with ID '{db_storage_unit_type.id}' already exists."
+        )
+
+def update_storage_unit_type(db: Session, storage_unit_type_id: str, storage_unit_type: StorageUnitTypeBase) -> None:
+    db_storage_unit_type = db.query(StorageUnitType).filter(
+        StorageUnitType.id == storage_unit_type_id
+    ).first()
+
+    if db_storage_unit_type is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Storage unit type '{storage_unit_type_id}' not found"
+        )
+
+    # Update fields
+    db_storage_unit_type.description = storage_unit_type.description
+
+    db.commit()
+    db.refresh(db_storage_unit_type)
