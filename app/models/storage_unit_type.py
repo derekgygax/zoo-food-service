@@ -24,8 +24,9 @@ class StorageUnitType(Base):
 
     @validates('id')
     def validate_specie(self, key, value):
-        # Force lowercase before insertion
-        return value.lower()
+        # Force lowercase, trim, and replace white spaces with underscores
+        value = value.strip().lower().replace(" ", "_")
+        return value
 
     @validates('created_at')
     def validate_created_at(self, key, value):
