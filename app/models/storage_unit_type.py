@@ -1,30 +1,31 @@
 
-from sqlalchemy import Column, Enum, String, Date, DateTime, func, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Column, String, DateTime, func
 from sqlalchemy.orm import relationship, validates
-from uuid import uuid4
 from datetime import datetime
 import pytz
 
-# Local
+from sqlalchemy import Column
+
+# local
 from app.database import Base
-from app.enums.example import EXAMPLE
 
-# NOTE!!:
-#   You do NOT need name to define the column name unless the 
-#   the column name is different than the attribute
-#   This is just there to show how
+class StorageUnitType(Base):
+    __tablename__ = "storage_unit_type"
 
-class Example(Base):
-    __tablename__ = "example"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, name="id")
-    name = Column(String(100), nullable=False, name="name")
-    type = Column(Enum(EXAMPLE), nullable=False)
+    id = Column(String(100), primary_key=True, nullable=False, name="id")
+    description = Column(String(500), nullable=False, name="description")
 
     # Timestamps - keep track of when entry was created and updated. maybe need in future
     created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(pytz.UTC), nullable=False, name="created_at")
     updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(pytz.UTC), onupdate=func.now(), nullable=False, name="updated_at")
+
+    # Relationship to storage_unit
+    storage_units = relationship("StorageUnit", back_populates="storage_unit_type", cascade="save-update")
+
+    @validates('id')
+    def validate_specie(self, key, value):
+        # Force lowercase before insertion
+        return value.lower()
 
     @validates('created_at')
     def validate_created_at(self, key, value):
@@ -32,7 +33,7 @@ class Example(Base):
         if getattr(self, key) is not None:
             raise ValueError("The `created_at` field cannot be modified after creation.")
         return value
-
+    
 # TODO FOR RETRIEVING THE TIMEZONE!!
 # # Assuming `post.created_at` is a timezone-aware datetime in UTC
 # user_timezone = pytz.timezone("America/New_York")  # Example user timezone

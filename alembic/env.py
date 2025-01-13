@@ -11,7 +11,10 @@ from dotenv import load_dotenv
 # DB models
 # TODO ADD REAL MODELS!!! I THINK NEEDED SO IT WORKS! (But maybe I just don't know shit)
 from app.database import Base
-from app.models.example import Example
+from app.models.storage_unit import StorageUnit
+from app.models.storage_unit_type import StorageUnitType
+from app.models.food_stock import FoodStock
+from app.models.food_type import FoodType
 
 # Load .env variables
 # the file exists one directory up
