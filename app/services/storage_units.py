@@ -14,6 +14,19 @@ from app.schemas.storage_unit.storage_unit_base import StorageUnitBase
 # services
 from app.services.storage_unit_types import _validate_storage_unit_type_exists
 
+
+def _validate_storage_unit_exists(db: Session, storage_unit_id: UUID) -> None:
+    """
+    Validate that the storage unit exists in the database.
+    """
+    if not db.query(StorageUnit).filter_by(id=storage_unit_id).first():
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Storage Unit does not exist."
+        )
+    
+
+
 def get_all_storage_units(db: Session) -> List[StorageUnit]:
     return db.query(StorageUnit).all()
 
