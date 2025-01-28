@@ -12,7 +12,7 @@ class StorageUnit(Base):
     __tablename__ = "storage_unit"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4, name="id")
-    name = Column(String(100), nullable=False, name="name")
+    name = Column(String(100), nullable=False, name="name", unique=True)
     storage_unit_type_id = Column(String(100), ForeignKey("storage_unit_type.id", ondelete="RESTRICT"), nullable=False, name="storage_unit_type_id")
     capacity = Column(Integer, nullable=False, name="capacity")
 
