@@ -9,6 +9,18 @@ from sqlalchemy import Column
 # local
 from app.database import Base
 
+
+# TODO set up relationship about which food is allowed in which storage unit type
+# TODO set up relationship about which food is allowed in which storage unit type
+# TODO set up relationship about which food is allowed in which storage unit type
+# TODO set up relationship about which food is allowed in which storage unit type
+# TODO set up relationship about which food is allowed in which storage unit type
+# TODO set up relationship about which food is allowed in which storage unit type
+# TODO set up relationship about which food is allowed in which storage unit type
+# TODO set up relationship about which food is allowed in which storage unit type
+# TODO set up relationship about which food is allowed in which storage unit type
+
+
 class StorageUnitType(Base):
     __tablename__ = "storage_unit_type"
 

@@ -46,8 +46,8 @@ def get_all_storage_unit_type_bases(db: Session) -> List[StorageUnitTypeBase]:
 
 
 
-def add_storage_unit_type(db: Session, storage_unit_type: StorageUnitTypeBase) -> None:
-    db_storage_unit_type = StorageUnitType(**storage_unit_type.model_dump())
+def add_storage_unit_type(db: Session, storage_unit_type_base: StorageUnitTypeBase) -> None:
+    db_storage_unit_type = StorageUnitType(**storage_unit_type_base.model_dump())
     try:
         db.add(db_storage_unit_type)
         db.commit()

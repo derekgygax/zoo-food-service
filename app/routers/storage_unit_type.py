@@ -48,7 +48,7 @@ async def add_storage_unit_type(
 
 # PUT METHODS
 
-@router.put("/{specie_id}", tags=["animal"], status_code=status.HTTP_204_NO_CONTENT, response_model=None)
+@router.put("/{storage_unit_type_id}", tags=["storage_unit_type"], status_code=status.HTTP_204_NO_CONTENT, response_model=None)
 async def update_storage_unit_type(
 	storage_unit_type_id: str,
 	storage_unit_type_base: StorageUnitTypeBase,
