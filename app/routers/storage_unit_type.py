@@ -11,13 +11,7 @@ from app.schemas.storage_unit_type.storage_unit_type import StorageUnitType
 from app.schemas.storage_unit_type.storage_unit_type_base import StorageUnitTypeBase
 
 # services
-from app.services.storage_unit_types import( 
-    get_all_storage_unit_types, 
-    get_all_storage_unit_type_ids,
-    get_all_storage_unit_type_bases,
-	add_storage_unit_type as add_storage_unit_type_service,
-	update_storage_unit_type as update_storage_unit_type_service
-)
+from app.services import storage_unit_types_service
 
 router = APIRouter(prefix="/api/v1/storage-unit-types")
 
@@ -25,15 +19,15 @@ router = APIRouter(prefix="/api/v1/storage-unit-types")
 # GET METHODS
 @router.get("/",  tags=["storage_unit_type"], response_model=List[StorageUnitType])
 async def get_storage_unit_types(db: Session = Depends(get_db)):
-	return get_all_storage_unit_types(db=db)
+	return storage_unit_types_service.get_all_storage_unit_types(db=db)
 
 @router.get("/ids", tags=["storage_unit_type"], response_model=List[str])
 async def get_storage_unit_types_ids(db: Session = Depends(get_db)):
-	return get_all_storage_unit_type_ids(db=db)
+	return storage_unit_types_service.get_all_storage_unit_type_ids(db=db)
 
 @router.get("/base", tags=["storage_unit_type"], response_model=List[StorageUnitTypeBase])
 async def get_storage_unit_type_bases(db: Session = Depends(get_db)):
-	return get_all_storage_unit_type_bases(db=db)
+	return storage_unit_types_service.get_all_storage_unit_type_bases(db=db)
 
 
 # POST METHODS
@@ -43,7 +37,7 @@ async def add_storage_unit_type(
 	# current_user: JWT = Depends(get_current_user),
 	db: Session = Depends(get_db)
 ):
-	add_storage_unit_type_service(db = db, storage_unit_type_base = storage_unit_type_base)
+	storage_unit_types_service.add_storage_unit_type(db = db, storage_unit_type_base = storage_unit_type_base)
 	return
 
 # PUT METHODS
@@ -55,6 +49,6 @@ async def update_storage_unit_type(
 	# current_user: JWT = Depends(get_current_user),
 	db: Session = Depends(get_db)
 ):
-	update_storage_unit_type_service(db=db, storage_unit_type_id=storage_unit_type_id, storage_unit_type_base=storage_unit_type_base)
+	storage_unit_types_service.update_storage_unit_type(db=db, storage_unit_type_id=storage_unit_type_id, storage_unit_type_base=storage_unit_type_base)
 	return
 

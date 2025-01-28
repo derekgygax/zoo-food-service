@@ -12,7 +12,7 @@ from app.schemas.storage_unit.storage_unit_identifier import StorageUnitIdentifi
 from app.schemas.storage_unit.storage_unit_base import StorageUnitBase
 
 # services
-from app.services.storage_unit_types import _validate_storage_unit_type_exists
+from app.services.storage_unit_types_service import _validate_storage_unit_type_exists
 
 
 def _validate_storage_unit_exists(db: Session, storage_unit_id: UUID) -> None:

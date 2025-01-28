@@ -11,9 +11,9 @@ from app.models.food_stock import FoodStock
 from app.schemas.food_stock.food_stock_base import FoodStockBase
 
 # services
-from app.services.food_types import _validate_food_type_exists
-from app.services.storage_unit_types import _validate_storage_unit_type_exists
-from app.services.storage_units import _validate_storage_unit_exists
+from app.services.food_types_service import _validate_food_type_exists
+from app.services.storage_unit_types_service import _validate_storage_unit_type_exists
+from app.services.storage_units_service import _validate_storage_unit_exists
 
 def get_all_food_stocks(db: Session) -> List[FoodStock]:
     return db.query(FoodStock).all()
