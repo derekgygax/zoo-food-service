@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from app.models.storage_unit_type import StorageUnitType
 
 # Schemas
+from app.schemas.model_identifier import ModelIdentifier
 from app.schemas.storage_unit_type.storage_unit_type_base import StorageUnitTypeBase
 
 def _validate_storage_unit_type_exists(db: Session, storage_unit_type_id: str) -> None:
@@ -44,7 +45,27 @@ def get_all_storage_unit_type_bases(db: Session) -> List[StorageUnitTypeBase]:
         StorageUnitTypeBase.model_validate(type) for type in storage_unit_type
     ]
 
+def get_all_storage_unit_type_identifiers(db: Session) -> List[ModelIdentifier]:
+    storage_unit_type_ids = get_all_storage_unit_type_ids(db=db)
+    return [
+        ModelIdentifier(id=str(id), label=str(id)) for id in storage_unit_type_ids
+    ]
 
+def get_storage_unit_type_base_by_id(db: Session, storage_unit_type_id: str) -> StorageUnitTypeBase:
+    storage_unit_type = db.query(StorageUnitType).filter(StorageUnitType.id == storage_unit_type_id).options(
+        load_only(
+            StorageUnitType.id,
+            StorageUnitType.description
+        )
+    ).first()
+
+    if not storage_unit_type:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Storage Unit Type with the id ${storage_unit_type_id} not found"
+        )
+    
+    return storage_unit_type
 
 def add_storage_unit_type(db: Session, storage_unit_type_base: StorageUnitTypeBase) -> None:
     db_storage_unit_type = StorageUnitType(**storage_unit_type_base.model_dump())

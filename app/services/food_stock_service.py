@@ -8,9 +8,12 @@ from fastapi import HTTPException, status
 from app.models.food_stock import FoodStock
 
 # schemas
+from app.models.food_type import FoodType
+from app.models.storage_unit import StorageUnit
 from app.schemas.food_stock.food_stock_base import FoodStockBase
 
 # services
+from app.schemas.model_identifier import ModelIdentifier
 from app.services.food_types_service import _validate_food_type_exists
 from app.services.storage_unit_types_service import _validate_storage_unit_type_exists
 from app.services.storage_units_service import _validate_storage_unit_exists
@@ -38,7 +41,17 @@ def get_food_stock_base_by_id(db: Session, food_stock_id: UUID) -> FoodStockBase
     
     return FoodStockBase.model_validate(food_stock)
 
-
+def get_all_food_stock_identifiers(db: Session) -> List[ModelIdentifier]:
+    food_stock_identifiers = db.query(
+            FoodStock.id,
+            FoodStock.food_type_id,
+            FoodStock.expiration_date,
+            StorageUnit.name.label("storage_unit_name"),
+    ).join(StorageUnit, FoodStock.storage_unit_id == StorageUnit.id).all()
+    return [
+        ModelIdentifier(id=str(identifier.id), label=f"{identifier.food_type_id} in {identifier.storage_unit_name}, expires on {identifier.expiration_date}")
+        for identifier in food_stock_identifiers
+    ]
 
 def add_food_stock(db: Session, food_stock_base: FoodStockBase) -> None:
 

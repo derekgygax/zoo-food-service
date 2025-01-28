@@ -11,6 +11,7 @@ from app.schemas.food_stock.food_stock import FoodStock
 from app.schemas.food_stock.food_stock_base import FoodStockBase
 
 # services
+from app.schemas.model_identifier import ModelIdentifier
 from app.services import food_stock_service
 
 router = APIRouter(prefix="/api/v1/food-stocks")
@@ -19,7 +20,11 @@ router = APIRouter(prefix="/api/v1/food-stocks")
 async def get_food_stocks(db: Session = Depends(get_db)):
 	return food_stock_service.get_all_food_stocks(db=db)
 
-@router.get("/{food_stock_id}", response_model=FoodStockBase)
+@router.get("/identifiers", tags=["food_type"], response_model=List[ModelIdentifier])
+async def get_food_type_ids(db: Session = Depends(get_db)):
+	return food_stock_service.get_all_food_stock_identifiers(db=db)
+
+@router.get("/{food_stock_id}/base", response_model=FoodStockBase)
 async def get_food_stock_base_by_id(
 	food_stock_id: UUID,
 	db: Session = Depends(get_db),

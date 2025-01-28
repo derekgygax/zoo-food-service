@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 
 # schemas
+from app.schemas.model_identifier import ModelIdentifier
 from app.schemas.storage_unit_type.storage_unit_type import StorageUnitType
 from app.schemas.storage_unit_type.storage_unit_type_base import StorageUnitTypeBase
 
@@ -28,6 +29,14 @@ async def get_storage_unit_types_ids(db: Session = Depends(get_db)):
 @router.get("/base", tags=["storage_unit_type"], response_model=List[StorageUnitTypeBase])
 async def get_storage_unit_type_bases(db: Session = Depends(get_db)):
 	return storage_unit_types_service.get_all_storage_unit_type_bases(db=db)
+
+@router.get("/identifiers", tags=["food_type"], response_model=List[ModelIdentifier])
+async def get_storage_unit_type_identifiers(db: Session = Depends(get_db)):
+	return storage_unit_types_service.get_all_storage_unit_type_identifiers(db=db)
+
+@router.get("/{storage_unit_type_id}/base", tags=["food_type"], response_model=StorageUnitTypeBase)
+async def get_food_type_base_by_id(storage_unit_type_id: str, db: Session = Depends(get_db)):
+	return storage_unit_types_service.get_storage_unit_type_base_by_id(db=db, storage_unit_type_id=storage_unit_type_id)
 
 
 # POST METHODS
