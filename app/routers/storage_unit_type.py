@@ -18,7 +18,7 @@ router = APIRouter(prefix="/api/v1/storage-unit-types")
 
 
 # GET METHODS
-@router.get("/",  tags=["storage_unit_type"], response_model=List[StorageUnitType])
+@router.get("",  tags=["storage_unit_type"], response_model=List[StorageUnitType])
 async def get_storage_unit_types(db: Session = Depends(get_db)):
 	return storage_unit_types_service.get_all_storage_unit_types(db=db)
 
@@ -40,7 +40,7 @@ async def get_food_type_base_by_id(storage_unit_type_id: str, db: Session = Depe
 
 
 # POST METHODS
-@router.post("/", tags=["storage_unit_type"], status_code=status.HTTP_201_CREATED, response_model=None)
+@router.post("", tags=["storage_unit_type"], status_code=status.HTTP_201_CREATED, response_model=None)
 async def add_storage_unit_type(
 	storage_unit_type_base: StorageUnitTypeBase,
 	# current_user: JWT = Depends(get_current_user),

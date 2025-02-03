@@ -16,7 +16,7 @@ from app.services import food_stock_service
 
 router = APIRouter(prefix="/api/v1/food-stocks")
 
-@router.get("/", response_model=List[FoodStock])
+@router.get("", response_model=List[FoodStock])
 async def get_food_stocks(db: Session = Depends(get_db)):
 	return food_stock_service.get_all_food_stocks(db=db)
 
@@ -32,7 +32,7 @@ async def get_food_stock_base_by_id(
 	return food_stock_service.get_food_stock_base_by_id(db=db, food_stock_id=food_stock_id)
 
 
-@router.post("/")
+@router.post("")
 async def add_food_stock(
 	food_stock_base: FoodStockBase, 
 	db: Session = Depends(get_db)

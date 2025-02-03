@@ -17,7 +17,7 @@ from app.services import storage_units_service
 
 router = APIRouter(prefix="/api/v1/storage-units")
 
-@router.get("/", response_model=List[StorageUnit])
+@router.get("", response_model=List[StorageUnit])
 async def get_storage_units(db: Session = Depends(get_db)):
 	return storage_units_service.get_all_storage_units(db=db)
 
@@ -30,7 +30,7 @@ async def get_storage_unit_base_by_id(storage_unit_id: UUID, db: Session = Depen
     return storage_units_service.get_storage_unit_base_by_id(db=db, storage_unit_id=storage_unit_id)
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=None)
+@router.post("", status_code=status.HTTP_201_CREATED, response_model=None)
 async def add_storage_unit(
     storage_unit_base: StorageUnitBase,
     db: Session = Depends(get_db),
