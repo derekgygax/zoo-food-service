@@ -17,8 +17,5 @@ __pycache__/
 *.py[cod]
 *.cpython-*
 
-# Help file
-HELP.md
-
 # DS_Store
 .DS_Store
