@@ -1,5 +1,5 @@
 [project]
-name = "zoo-animals-service"
+name = "zoo-food-service"
 version = "0.1.0"
 description = ""
 authors = [
