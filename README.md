@@ -36,7 +36,7 @@ Make sure you have **Poetry** installed:
   poetry install
   ```
 
-4. Set up environment variables:
+3. Set up environment variables:
   - Create a `.env` file in the root directory with the necessary configuration.
     Example:
     ```
